@@ -76,7 +76,6 @@ class StripeTerminal {
   Future<bool> connectToReader(
     /// Serial number of the reader to connect with
     String readerSerialNumber, {
-
     /// The id of the location on which you want to conenct this bluetooth reader with.
     ///
     /// Either you have to provide a location here or the device should already be registered to a location
@@ -100,7 +99,6 @@ class StripeTerminal {
   Future<bool> connectBluetoothReader(
     /// Serial number of the bluetooth reader to connect with
     String readerSerialNumber, {
-
     /// The id of the location on which you want to conenct this bluetooth reader with.
     ///
     /// Either you have to provide a location here or the device should already be registered to a location
@@ -125,7 +123,6 @@ class StripeTerminal {
   Future<bool> connectToInternetReader(
     /// Serial number of the internet reader to connect with
     String readerSerialNumber, {
-
     /// Weather the connection process should fail if the device is already in use
     bool failIfInUse = false,
   }) async {
@@ -206,13 +203,13 @@ class StripeTerminal {
   /// Can contain an empty array if no readers are found.
   ///
   /// [simulated] se to `true` will simulate readers which can be connected and tested.
-  Stream<List<StripeReader>> discoverReaders(
+  Future<Stream<List<StripeReader>>> discoverReaders(
     /// Configuration for the discovry process
     DiscoverConfig config,
-  ) {
+  ) async {
     _readerStreamController = StreamController<List<StripeReader>>();
 
-    _channel.invokeMethod("discoverReaders#start", {
+    await _channel.invokeMethod("discoverReaders#start", {
       "config": config.toMap(),
     });
     _readerStreamController.onCancel = () {
@@ -234,7 +231,6 @@ class StripeTerminal {
   Future<StripePaymentIntent> collectPaymentMethod(
     // Client secret of the payment intent which you want to collect payment mwthod for
     String clientSecret, {
-
     /// Configruation for the collection process
     CollectConfiguration? collectConfiguration = const CollectConfiguration(
       skipTipping: true,
