@@ -203,15 +203,17 @@ class StripeTerminal {
   /// Can contain an empty array if no readers are found.
   ///
   /// [simulated] se to `true` will simulate readers which can be connected and tested.
-  Future<Stream<List<StripeReader>>> discoverReaders(
+  Stream<List<StripeReader>> discoverReaders(
     /// Configuration for the discovry process
     DiscoverConfig config,
-  ) async {
+  ) {
     _readerStreamController = StreamController<List<StripeReader>>();
 
-    await _channel.invokeMethod("discoverReaders#start", {
+    _channel.invokeMethod("discoverReaders#start", {
       "config": config.toMap(),
-    });
+    }).onError((error, stackTrace) => _readerStreamController.addError(
+        error ?? Exception("Unknown error"), stackTrace));
+
     _readerStreamController.onCancel = () {
       _channel.invokeMethod("discoverReaders#stop");
       _readerStreamController.close();
