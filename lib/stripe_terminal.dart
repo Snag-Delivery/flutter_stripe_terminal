@@ -196,6 +196,19 @@ class StripeTerminal {
     return StripePaymentMethod.fromJson(cardDetail);
   }
 
+  /// Sets simulated card details for the reader
+  /// This will only work if you have set `simulated` to `true` in the `discoverReaders` function
+  /// See https://stripe.com/docs/terminal/references/testing#simulated-test-cards for a list of
+  /// test card numbers
+  Future<void> setSimulatedCardDetails({
+    /// Card number to be set
+    required String cardNumber,
+  }) async {
+    await _channel.invokeMethod("setSimulatedCardNumber", {
+      "cardNumber": cardNumber,
+    });
+  }
+
   late StreamController<List<StripeReader>> _readerStreamController;
 
   /// Starts scanning readers in the vicinity. This will return a list of readers.

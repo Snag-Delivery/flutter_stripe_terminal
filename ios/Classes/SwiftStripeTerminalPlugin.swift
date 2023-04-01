@@ -112,6 +112,14 @@ public class SwiftStripeTerminalPlugin: NSObject, FlutterPlugin, DiscoveryDelega
                 )
             }
             break;
+
+        case "setSimulatedCardNumber":
+            let arguments = call.arguments as! Dictionary<String, Any>
+            let cardNumber = arguments["cardNumber"] as! String
+            Terminal.shared.simulatorConfiguration.simulatedCard = SimulatedCard(testCardNumber: cardNumber)
+            result(true)
+            break;
+
         case "discoverReaders#start":
             let arguments = call.arguments as! Dictionary<String, Any>
             let configData = arguments["config"] as! Dictionary<String, Any>
@@ -119,7 +127,7 @@ public class SwiftStripeTerminalPlugin: NSObject, FlutterPlugin, DiscoveryDelega
             let locationId = configData["locationId"] as? String
             let discoveryMethodString = configData["discoveryMethod"] as! String
             let discoveryMethod = StripeTerminalParser.getScanMethod(discoveryMethod: discoveryMethodString)
-            
+
             if(discoveryMethod == nil){
                 return result(
                     FlutterError(

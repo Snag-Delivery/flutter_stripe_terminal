@@ -152,6 +152,13 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
                     }
                 })
             }
+            "setSimulatedCardNumber" -> {
+                val arguments = call.arguments as HashMap<*, *>
+                val cardNumber = arguments["cardNumber"] as String
+                val currentConfig = Terminal.getInstance().simulatorConfiguration
+                Terminal.getInstance().simulatorConfiguration = SimulatorConfiguration(currentConfig.update, SimulatedCard(cardNumber))
+                result.success(true)
+            }
             "discoverReaders#start" -> {
                 val arguments = call.arguments as HashMap<*, *>
                 val discoverConfig = arguments["config"] as HashMap<*, *>
