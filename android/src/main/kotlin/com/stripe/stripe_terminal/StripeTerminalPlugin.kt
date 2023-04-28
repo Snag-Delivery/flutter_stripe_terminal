@@ -54,6 +54,7 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
         )
     }
 
+    private var cancelablePayment: Cancelable? = null
 
     // Change this to other level soon
     private val logLevel = LogLevel.VERBOSE
@@ -453,7 +454,7 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
                                 }
 
                                 override fun onSuccess(paymentIntent: PaymentIntent) {
-                                    Terminal.getInstance().collectPaymentMethod(
+                                    cancelablePayment = Terminal.getInstance().collectPaymentMethod(
                                         paymentIntent,
                                         object : PaymentIntentCallback {
 
@@ -501,6 +502,30 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
                                 }
 
                             })
+                }
+            }
+            "cancelPayment" -> {
+                if (cancelablePayment == null) {
+                    result.error(
+                        "stripeTerminal#unabelToCancelPayment",
+                        "There is no processing payment.",
+                        null
+                    )
+                } else {
+                    cancelablePayment?.cancel(object : Callback {
+                        override fun onFailure(e: TerminalException) {
+                            result.error(
+                                "stripeTerminal#unabelToCancelPayment",
+                                "Unable to cancel action because ${e.errorMessage}",
+                                e.stackTraceToString()
+                            )
+                        }
+
+                        override fun onSuccess() {
+                            result.success(true)
+                        }
+                    })
+                    cancelablePayment = null
                 }
             }
             "disconnectFromReader" -> {
