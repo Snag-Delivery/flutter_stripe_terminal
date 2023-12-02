@@ -38,6 +38,7 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
     private var cancelableDiscover: Cancelable? = null
     private var activeReaders: List<Reader> = arrayListOf()
     private var simulated = false
+    private var waitingForPermission = false
     private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -583,6 +584,7 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
 
         this.result = result
 
+        waitingForPermission = true
         ActivityCompat.requestPermissions(currentActivity!!, permissions, REQUEST_CODE_LOCATION)
 
         return false
@@ -596,7 +598,7 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
         val permissionStatus = permissions.map {
             ContextCompat.checkSelfPermission(currentActivity!!, it)
         }
-        if (!permissionStatus.contains(PackageManager.PERMISSION_DENIED)) {
+        if (waitingForPermission && !permissionStatus.contains(PackageManager.PERMISSION_DENIED)) {
             _startStripe()
         } else {
             result?.error(
@@ -711,6 +713,10 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onWindowFocusChanged(p0: Boolean): Unit {
         TODO("Not yet implemented")
     }
 
