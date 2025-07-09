@@ -2,11 +2,8 @@ package com.stripe.stripe_terminal
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
-import android.os.Bundle
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,7 +14,6 @@ import com.stripe.stripeterminal.external.OnReaderTips
 import com.stripe.stripeterminal.external.callable.*
 import com.stripe.stripeterminal.external.models.*
 import com.stripe.stripeterminal.log.LogLevel
-import io.flutter.app.FlutterActivityEvents
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -29,7 +25,7 @@ import io.flutter.plugin.common.PluginRegistry
 
 /** StripeTerminalPlugin */
 class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
-    PluginRegistry.RequestPermissionsResultListener, ActivityAware, FlutterActivityEvents {
+    PluginRegistry.RequestPermissionsResultListener, ActivityAware {
 
     private lateinit var channel: MethodChannel
     private var currentActivity: Activity? = null
@@ -654,72 +650,6 @@ class StripeTerminalPlugin : FlutterPlugin, MethodCallHandler,
     override fun onDetachedFromActivityForConfigChanges() {
         currentActivity = null
     }
-
-
-    /*
-     These functions are stub functions that are not relevent to the plugin but needs to be defined in order to get the few necessary callbacks
-    */
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPause() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onStart() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onResume() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPostResume() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDestroy() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onStop() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onBackPressed(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onUserLeaveHint() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onConfigurationChanged(p0: Configuration) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onLowMemory() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onTrimMemory(p0: Int) {
-        TerminalApplicationDelegate.onTrimMemory(currentActivity!!.application, p0)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onWindowFocusChanged(p0: Boolean): Unit {
-        TODO("Not yet implemented")
-    }
-
 
 }
 
